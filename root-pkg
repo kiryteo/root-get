@@ -38,6 +38,8 @@ def install_pkg(pkg):
   if ecanalyze != 0:
     print("Failed to configure package")
     return False
+
+  os.system(pwd_path + "/analyzer/" + "python3 generator.py")
 # Building DB
   db_manifest = db4pkg()
   if not db_manifest:
