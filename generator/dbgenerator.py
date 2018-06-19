@@ -22,8 +22,8 @@ class Dbgenerator(object):
 						fl = t.read()
 						r1 = rule1.findall(fl)
 						r1 = [x.strip(' name: ') for x in r1]
-						r2 = rule2.findall(r2)
-						r3 = rule3.findall(r3)
+						r2 = rule2.findall(fl)
+						r3 = rule3.findall(fl)
 						if r1:
 							fl2 = open("manifest.yml", 'a')
 							fl2.write(",".join(r1))
