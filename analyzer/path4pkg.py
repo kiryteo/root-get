@@ -2,6 +2,7 @@
 Experiments on trying to generate package for ROOT PM
 """
 import os
+import subprocess
 
 class Path4pkg(object):
     """docstring for Path4pkg."""
@@ -29,3 +30,11 @@ class Path4pkg(object):
             elif depth > maxdepth:
                 del dirs[:] # too deep, don't recurse
             #raise Exception('Exist only package with such name!')
+
+    def nameresolver(self, arg):
+        macro_file = open('macro.txt', 'a')
+        macro_file.write(arg)
+        macro_file.close()
+        cmd = "cmake -P macro.txt"
+        output = subprocess.check_output(cmd, shell=True, universal_newlines=True, stderr=subprocess.STDOUT)
+        return output

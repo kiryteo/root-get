@@ -1,0 +1,4 @@
+macro(ROOT_STANDARD_LIBRARY_PACKAGE libname)
+  message(${libname})
+endmacro()
+

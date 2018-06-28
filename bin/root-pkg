@@ -4,6 +4,7 @@ import sys
 import os
 import json
 import re
+import subprocess
 from difflib import get_close_matches
 from os.path import expanduser
 import yaml
@@ -22,17 +23,17 @@ from integrator.zip4pkg import *
 home = expanduser("~")
 os.environ["ROOT_PKG_CACHE"] = home + "/.cache/root-pkgs/"
 root_cache = os.environ["ROOT_PKG_CACHE"]
-print("[root-get] root-get cache: ", root_cache)
+print("[root-get] root-get cache: " + root_cache)
 root_sources = os.environ['ROOTSOURCES']
-print("[root-get] ROOT sources: ", root_sources)
+print("[root-get] ROOT sources: " + root_sources)
 pkg_path = os.environ['ROOT_PKG_PATH']
-print("[root-get] ROOT packages installation path: ", pkg_path)
+print("[root-get] ROOT packages installation path: " + pkg_path)
 pwd_path = os.getcwd()
-print("[root-get] root-get location: ", pwd_path)
+print("[root-get] root-get location: " + pwd_path)
 
 def install_pkg(pkg):
     src_dir_root = ''
-#
+#	
 # Checkout packages if we have them in ROOT
 #
     check_package = os.system('find %s -maxdepth 1 -type d  -name "%s" ! -path "*tutorials*" ! -path "*dictpch*"' % (root_sources, pkg))
@@ -45,6 +46,19 @@ def install_pkg(pkg):
         path = Path4pkg()
         src_dir_root = path.path4pkg(pkg, root_sources)
         print("[root-get] We would  use a package from {0:s}".format(src_dir_root))
+        with open(src_dir_root+"/CMakeLists.txt") as src:
+        	src_read = src.read()
+
+        correct_name = path.nameresolver(src_read)
+
+        print("did you mean " + correct_name)
+
+        a = raw_input("please enter Y/N...")
+        if a == 'Y' or a == 'y':
+            pkg = str(correct_name)
+        else:
+            exit(0)
+
 #
 # Analyzing packages
 #
