@@ -72,6 +72,8 @@ class Dbgenerator(object):
 
     def manifest_generator(self, arg):
         rootdir = os.environ['ROOTSYS']
+        global namelist
+        namelist = []
 
         """ Set of rules to be used for generator of package DB """
         rule_name = re.compile('.*name:.*')
@@ -106,28 +108,33 @@ class Dbgenerator(object):
                 pkg_manifest_file = open("pkg_manifest.yml", 'a')
                 pkg_manifest_file.write(parcing_rule_name[0])
                 pkg_manifest_file.write(":\n")
+                pkg_manifest_file.close()
 
             if rule_tag_check:
                 pkg_manifest_file = open("pkg_manifest.yml", 'a')
                 pkg_manifest_file.write(rule_tag_check[0])
                 pkg_manifest_file.write("\n")
+                pkg_manifest_file.close()
 
             if rule_targets_check:
                 pkg_manifest_file = open("pkg_manifest.yml", 'a')
                 pkg_manifest_file.write(" target: ")
                 pkg_manifest_file.write(parcing_rule_name[1])
                 pkg_manifest_file.write("\n")
+                pkg_manifest_file.close()
 
             if rule_products_check:
                 pkg_manifest_file = open("pkg_manifest.yml", 'a')
                 pkg_manifest_file.write(" products: ")
                 pkg_manifest_file.write(parcing_rule_name[2])
                 pkg_manifest_file.write("\n")
+                pkg_manifest_file.close()
 
             """Iterating over the rule lists"""
-            for i in range(3,module_len):
+            for i in range(3,module_len+3):
                 pkg_manifest_file = open("pkg_manifest.yml", 'a')
                 pkg_manifest_file.write(" " + parcing_rule_name[i] + ":\n")
+                namelist.append(parcing_rule_name[i])
                 pkg_manifest_file.write(" " + rule_package_url_check[i-3] + "\n")
                 pkg_manifest_file.write(" " + rule_tag_check[i-2] + "\n")
                 pkg_manifest_file.write(" " + rule_path_check[i-3] + "\n")
@@ -135,6 +142,11 @@ class Dbgenerator(object):
                 pkg_manifest_file.write(" " + rule_sources_check[i-3] + "\n")
                 pkg_manifest_file.write(" " + rule_targets_check[i-2] + "\n")
                 pkg_manifest_file.write(" " + rule_deps_check[i-3] + "\n")
+                pkg_manifest_file.close()
+
+            pkgfile.close()
+
+        return namelist
 
     def clean_deps(self):
         workdir = os.getcwd()

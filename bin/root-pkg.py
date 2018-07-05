@@ -100,11 +100,12 @@ def generation_db_packages():
     print("[root-get] DEBUG: Genearating DB for packages")
     database = Db4pkg()
     package = raw_input("Enter ROOT package name: ")
-    db_manifest = database.generated_manifest_pkg(package)
+    package = str(package)
+    db_manifest, modules = database.generated_manifest_pkg(package)
     if not db_manifest:
         print("[root-get] Failed to generate DB for ROOT packages")
         return False
-    return db_manifest
+    return db_manifest, modules
 
 def print_db_manifest(db_manifest):
     """ Print DB """
@@ -290,11 +291,14 @@ def install_dep_pkg(pkg, db_manifest):
 def install_pkg(pkg):
     """ Main installation routine for main package"""
 # Checkout packages if we have them in ROOT
-    src_path = check_module_path(pkg)
+    src_path = check_package_path(pkg)
 # Analyzing packages: generation of package/module CMakeFile.txt,
     analizer_package(pkg, src_path)
 # Building DB
-    db_manifest = generation_db_modules()
+    db_manifest, modules = generation_db_packages()
+
+    for module in range(len(modules)):
+        install_dep_pkg(module, db_manifest)
 # Print DB
     print_db_manifest(db_manifest)
 # Generating DB instance for dag

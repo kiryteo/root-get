@@ -16,6 +16,7 @@ class PathChecker(object):
     def path4module(cls, dirname, directory='', mindepth=2, maxdepth=float('inf')):
         """ Function checking a "walking/search" functionality for ROOT modules"""
         directory = os.path.normcase(directory)
+        dirname = str(dirname)
         dirname = dirname.lower()
         non_acceptable_dirs = set(['tutorials', 'test', 'interpreter', 'dictpch'])
         directory_exceptions = set(['rfio', 'io'])

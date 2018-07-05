@@ -160,6 +160,22 @@ class Db4pkg():
                 print(exc)
         return db_manifest
 
+    def generated_manifest_pkg(self, arg):
+        if not os.path.exists('./pkg_manifest.yml'):
+            print("[root-get] No pkg_manifest file..weird, please check.")
+            open('pkg_manifest.yml', 'a').close()
+        DBgen = Dbgenerator()
+        modules = DBgen.manifest_generator(arg)
+        global db_value
+        db_value = DBgen.clean_deps_pkg()
+        db_manifest = []
+        with open("pkg_manifest.yml") as stream:
+            try:
+                db_manifest = yaml.load(stream)
+            except yaml.YAMLError as exc:
+                print(exc)
+        return db_manifest, modules
+
     def pre_dag(self, db_manifest):
         """ Removing not needed keys, needed step for DAG
             FIXME: will not be needed for generated manifests
